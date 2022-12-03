@@ -9,16 +9,16 @@ const startBnt = document.getElementById('start-bnt');
 const audio = document.getElementById('audio');
 const audio2 = document.getElementById('audio2');
 const audio3 = document.getElementById('audio3');
-const overlay = document.getElementById('overlay')
+const overlay = document.getElementById('overlay');
 const imgContainer = document.getElementById('img-container');
 const main = () => {
   var settings = {
     particles: {
-      length: 100, // maximum amount of particles
-      duration: 4, // particle duration in sec
+      length: 150, // maximum amount of particles
+      duration: 2, // particle duration in sec
       velocity: 80, // particle velocity in pixels/sec
       effect: -1.3, // play with this for a nice effect
-      size: 8, // particle size in pixels
+      size: 20, // particle size in pixels
     },
   };
   var Particle = (function () {
@@ -235,17 +235,17 @@ const main = () => {
 
     update() {
       if (this.direction === 'leftRight') {
-        this.x = this.x + 1.5;
-        this.y = this.y - 1.5;
+        this.x = this.x + 2;
+        this.y = this.y - 2;
       } else {
-        this.x = this.x - 1.5;
-        this.y = this.y + 1.5;
+        this.x = this.x - 2;
+        this.y = this.y + 2;
       }
 
-      if (this.x > 480 && this.y < 220) {
+      if (this.x >= 480 && this.y <= 220) {
         this.direction = 'rightLeft';
         this.globalAlpha = 0.5;
-      } else if (this.x < 220 && this.y > 480) {
+      } else if (this.x <= 220 && this.y >= 480) {
         this.globalAlpha = 1;
         this.direction = 'leftRight';
       }
@@ -254,10 +254,10 @@ const main = () => {
       context.globalAlpha = this.globalAlpha;
       if (typeof this.object === 'string') {
         context.fillStyle = 'red';
-        context.font = '600 14px Arial';
+        context.font = '600 40px Arial';
         context.fillText(this.object, this.x, this.y);
       } else {
-        context.drawImage(this.object, this.x, this.y, 12, 12);
+        context.drawImage(this.object, this.x, this.y - 25, 25, 25);
       }
     }
   }
@@ -275,17 +275,17 @@ const main = () => {
 
     update() {
       if (this.direction === 'leftRight') {
-        this.x = this.x - 1.5;
-        this.y = this.y - 1.5;
+        this.x = this.x - 2;
+        this.y = this.y - 2;
       } else {
-        this.x = this.x + 1.5;
-        this.y = this.y + 1.5;
+        this.x = this.x + 2;
+        this.y = this.y + 2;
       }
 
-      if (this.x < 220 && this.y < 220) {
+      if (this.x <= 220 && this.y <= 220) {
         this.direction = 'rightLeft';
         this.globalAlpha = 0.5;
-      } else if (this.x > 480 && this.y > 480) {
+      } else if (this.x >= 480 && this.y >= 480) {
         this.globalAlpha = 1;
         this.direction = 'leftRight';
       }
@@ -294,10 +294,10 @@ const main = () => {
       context.globalAlpha = this.globalAlpha;
       if (typeof this.object === 'string') {
         context.fillStyle = 'red';
-        context.font = '600 14px Arial';
+        context.font = '600 40px Arial';
         context.fillText(this.object, this.x, this.y);
       } else {
-        context.drawImage(this.object, this.x, this.y, 5, 5);
+        context.drawImage(this.object, this.x, this.y, 10, 10);
       }
     }
   }
@@ -311,24 +311,51 @@ const main = () => {
     const PoolRight = new Pools(10);
     const PoolLeft = new Pools(10);
     const image = getHeartImage();
-
-    let x = 480;
-    let y = 480;
-
-    let x2 = 220;
-    let y2 = 480;
-    const textsRight = ['T', 'H', 'A', 'O'];
-    const textsLeft = ['U', image, 'I'];
+    const textsRight = [
+      {
+        val: 'O',
+        x: 480,
+        y: 480,
+      },
+      {
+        val: 'Ả',
+        x: 440,
+        y: 440,
+      },
+      {
+        val: 'H',
+        x: 410,
+        y: 410,
+      },
+      {
+        val: 'T',
+        x: 380,
+        y: 380,
+      },
+    ];
+    const textsLeft = [
+      {
+        val: 'I',
+        x: 250,
+        y: 450,
+      },
+      {
+        val: image,
+        x: 290,
+        y: 410,
+      },
+      {
+        val: 'U',
+        x: 330,
+        y: 370,
+      },
+    ];
     textsRight.map((item, index) => {
-      setTimeout(() => {
-        PoolRight.add(new TextItemRight(x, y, item));
-      }, [400 + 400 * index]);
+      PoolRight.add(new TextItemRight(item.x, item.y, item.val));
     });
 
     textsLeft.map((item, index) => {
-      setTimeout(() => {
-        PoolLeft.add(new TextItemLeft(x2, y2, item));
-      }, [400 + 400 * index]);
+      PoolLeft.add(new TextItemLeft(item.x, item.y, item.val));
     });
 
     function render() {
@@ -428,7 +455,7 @@ const step1 = () => {
     [
       'Xin chào Thảo dễ thương, đáng yêu, xinh gái...',
       'Xứng đáng có người yêu là Nam dev',
-      'Để tiếp tục xin trả lời cầu hỏi sau ạ',
+      'Để tiếp tục xin trả lời câu hỏi sau ạ',
       'Nay Thảo còn giận Nam Dev code giỏi, đẹp trai ko ạ',
     ],
     'rebeccapurple',
@@ -446,7 +473,7 @@ const step2 = () => {
       'Anh biết mà, Thảo thương anh còn ko hết sao lại giận anh',
       'Please wait 5 seconds to continue',
     ],
-    'tomato',
+    'Pink',
     () => {
       const arr = ['5', '4', '3', '2', '1'];
       for (let i = 0; i < arr.length; i++) {
